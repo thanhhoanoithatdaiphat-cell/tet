@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Nhà Có Tết",
+      "hasCanvas": false,
+      "bodyTextLen": 4328,
+      "bodyTextHash": "2d18493e48d17256771fff2ac1bb07ddcf5256bed1db5dbaa6cf41a4ac4f09df",
+      "bodyTextPrefix": "Tới combo ĐẶT TRƯỚC 23 THÁNG CHẠP (30/01) ĐỂ NHÀ CÓ TẾT ĐÚNG TẾT",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Nhà Có Tết",
+      "hasCanvas": false,
+      "bodyTextLen": 4293,
+      "bodyTextHash": "2a9a87c20c28b14f3867d32e71779d0238a92996f8e3ca731d00de348f66d213",
+      "bodyTextPrefix": "Tới combo ĐẶT TRƯỚC 23 THÁNG CHẠP (30/01) ĐỂ NHÀ CÓ TẾT ĐÚNG TẾT",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

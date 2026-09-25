@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/van-hanh",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Vận hành · Nhà Có Tết",
+      "hasCanvas": false,
+      "bodyTextLen": 2441,
+      "bodyTextHash": "30ac482c7c44f30fe1f9d3761c31910d85528159f16ac35584ff2f9f52f76536",
+      "bodyTextPrefix": "Nhà Có Tết Bàn vận hành · bot tư vấn · chốt cổng 5 điều · lịch b",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/ops-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Vận hành · Nhà Có Tết",
+      "hasCanvas": false,
+      "bodyTextLen": 2441,
+      "bodyTextHash": "30ac482c7c44f30fe1f9d3761c31910d85528159f16ac35584ff2f9f52f76536",
+      "bodyTextPrefix": "Nhà Có Tết Bàn vận hành · bot tư vấn · chốt cổng 5 điều · lịch b",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/ops-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/ops-preview.json"
+}

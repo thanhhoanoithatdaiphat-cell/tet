@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8081/van-hanh",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Vận hành · Nhà Có Tết",
+      "hasCanvas": false,
+      "bodyTextLen": 60,
+      "bodyTextHash": "d924b7bb29ad635ba0a42a504e33d972a9e73502c4195b2794e3f0a0831c75ce",
+      "bodyTextPrefix": "Vận hành shop Nhập PIN 4 số. Trang bán không cần mã này. Vào",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/ops-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Vận hành · Nhà Có Tết",
+      "hasCanvas": false,
+      "bodyTextLen": 60,
+      "bodyTextHash": "d924b7bb29ad635ba0a42a504e33d972a9e73502c4195b2794e3f0a0831c75ce",
+      "bodyTextPrefix": "Vận hành shop Nhập PIN 4 số. Trang bán không cần mã này. Vào",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/ops-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/ops-built.json"
+}
