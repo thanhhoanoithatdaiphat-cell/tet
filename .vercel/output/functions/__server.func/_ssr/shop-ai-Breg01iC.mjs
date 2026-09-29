@@ -3,16 +3,16 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { l as Slot } from "../_libs/@radix-ui/react-dialog+[...].mjs";
 import { n as TSS_SERVER_FUNCTION, r as getServerFnById, t as createServerFn } from "./ssr.mjs";
-import { n as create, t as persist } from "../_libs/zustand.mjs";
-import { i as __exportAll$1 } from "./router-B0Jatq2T.mjs";
 import { t as cva } from "../_libs/class-variance-authority+clsx.mjs";
-import { c as detectPhone, d as draftReply, f as evaluateClose, h as getProduct, l as detectProvince, s as cn, u as detectSet } from "./brain-B76nEHmp.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/shop-ai-BKYKjlq5.js
-var shop_ai_BKYKjlq5_exports = /* @__PURE__ */ __exportAll({
+import { a as cn } from "./catalog-DXj0khw4.mjs";
+import { n as create, t as persist } from "../_libs/zustand.mjs";
+import { a as __exportAll$1, i as SHOP } from "./router-Ig1G8LPG.mjs";
+import { a as detectSet, c as getProduct, i as detectProvince, o as draftReply, r as detectPhone, s as evaluateClose } from "./brain-DS--dyyA.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/shop-ai-Breg01iC.js
+var shop_ai_Breg01iC_exports = /* @__PURE__ */ __exportAll({
 	a: () => Button,
 	c: () => zaloHref,
 	i: () => Input,
-	l: () => SHOP,
 	n: () => createSsrRpc,
 	o: () => ops_store_exports,
 	r: () => Label,
@@ -21,14 +21,6 @@ var shop_ai_BKYKjlq5_exports = /* @__PURE__ */ __exportAll({
 });
 require_react();
 var import_jsx_runtime = require_jsx_runtime();
-var SHOP = {
-	name: "Petitewoodart",
-	tagline: "Đồ gỗ cắt laser · giá bán lẻ",
-	zaloUrl: "https://zalo.me/0901741879",
-	phoneDisplay: "0901 741 879",
-	phoneTel: "0901741879",
-	email: ""
-};
 var ops_store_exports = /* @__PURE__ */ __exportAll$1({
 	useOps: () => useOps,
 	zaloHref: () => zaloHref
@@ -508,4 +500,4 @@ var consultShop = createServerFn({ method: "POST" }).validator((input) => ({
 	seasonId: typeof input.seasonId === "string" ? input.seasonId : null
 })).handler(createSsrRpc("c5de040a13e53003262cdbcc05f38b093b20bfddc7f2144a9c89969a8c8f94c8"));
 //#endregion
-export { consultShop as a, useOps as c, SHOP as i, zaloHref as l, Input as n, createSsrRpc as o, Label as r, shop_ai_BKYKjlq5_exports as s, Button as t };
+export { createSsrRpc as a, zaloHref as c, consultShop as i, Input as n, shop_ai_Breg01iC_exports as o, Label as r, useOps as s, Button as t };

@@ -2,11 +2,10 @@ import { useEffect } from "react";
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
+import { PAGE_DESCRIPTION, PAGE_TITLE } from "@/lib/config";
 import { useMedia } from "@/lib/media-store";
 import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
-
-const APP_NAME = "Petitewoodart";
 
 function MediaHydrator() {
   useEffect(() => {
@@ -20,12 +19,9 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: APP_NAME },
-      {
-        name: "description",
-        content:
-          "Đồ gỗ cắt laser Petitewoodart. Tag Tết, dây chữ, lịch, thư pháp, Noel, Halloween, giỏ hoa. Giá bán lẻ, COD.",
-      },
+      { title: PAGE_TITLE },
+      { name: "description", content: PAGE_DESCRIPTION },
+      { property: "og:locale", content: "vi_VN" },
       { name: "theme-color", content: "#8F2D2D" },
     ],
     links: [

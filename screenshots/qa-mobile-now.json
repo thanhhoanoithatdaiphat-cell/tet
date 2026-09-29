@@ -5,7 +5,7 @@
       "width": 1280,
       "height": 800,
       "status": 200,
-      "title": "Petitewoodart — đồ gỗ cắt laser",
+      "title": "Petitewoodart",
       "hasCanvas": false,
       "bodyTextLen": 3664,
       "bodyTextHash": "1930e201f876152a9dd0c6c05f77bd27fa485190f213634e4926002ae03834ab",
@@ -13,13 +13,13 @@
       "horizontalOverflow": false,
       "consoleErrors": [],
       "pageErrors": [],
-      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+      "screenshot": "/workspace/screenshots/qa-mobile-now.png"
     },
     "mobile": {
       "width": 390,
       "height": 844,
       "status": 200,
-      "title": "Petitewoodart — đồ gỗ cắt laser",
+      "title": "Petitewoodart",
       "hasCanvas": false,
       "bodyTextLen": 3664,
       "bodyTextHash": "05db8c75f85087fe37e9aeb96f5e2477f297ebefc4aa8f8fd15942baae516a99",
@@ -27,10 +27,12 @@
       "horizontalOverflow": false,
       "consoleErrors": [],
       "pageErrors": [],
-      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+      "screenshot": "/workspace/screenshots/qa-mobile-now-mobile.png"
     }
   },
   "brandWarnings": [],
   "authWarnings": [],
-  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+  "verdictFile": "/workspace/screenshots/qa-mobile-now.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
 }

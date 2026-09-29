@@ -5,7 +5,10 @@ import { PinGate } from "@/components/ops/pin-gate";
 export const Route = createFileRoute("/van-hanh")({
   component: OpsPage,
   head: () => ({
-    meta: [{ title: "Vận hành · Petitewoodart" }],
+    meta: [
+      { title: "Vận hành · Petitewoodart" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
   }),
 });
 

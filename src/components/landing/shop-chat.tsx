@@ -140,8 +140,8 @@ export function ShopChat({
       )}
 
       {open && (
-        <div className="fixed inset-x-0 bottom-0 z-50 flex h-[min(100dvh,36rem)] max-h-[100dvh] flex-col overflow-hidden rounded-t-2xl border border-border bg-surface shadow-xl sm:inset-x-auto sm:right-4 sm:bottom-4 sm:h-auto sm:max-h-[min(36rem,85dvh)] sm:w-[24rem] sm:rounded-2xl">
-          <div className="flex items-center justify-between border-b border-border px-4 py-3">
+        <div className="fixed inset-0 z-50 flex h-dvh max-h-dvh flex-col overflow-hidden bg-surface sm:inset-auto sm:right-4 sm:bottom-4 sm:h-auto sm:max-h-[min(36rem,85dvh)] sm:w-[24rem] sm:rounded-2xl sm:border sm:border-border sm:shadow-xl">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-3">
             <div>
               <p className="font-display text-lg leading-none">Hỏi shop · {season.name}</p>
               <p className="mt-1 text-xs text-muted-foreground">Giá đúng như trên trang. Hỏi tên món là được.</p>

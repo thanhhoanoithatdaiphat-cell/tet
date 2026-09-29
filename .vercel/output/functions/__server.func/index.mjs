@@ -12,7 +12,8 @@ var install_page_default = "<!DOCTYPE html>\n<html lang=\"en\" class=\"device-de
 //#endregion
 //#region \0virtual:grok-og-identity
 var grokOgIdentity = { "site": {
-	"title": "Nhà Có Tết",
+	"title": "Petitewoodart — đồ gỗ cắt laser",
+	"description": "Tag gỗ Tết, dây chữ treo cửa, lịch, thư pháp, đèn Halloween, đồ Noel và giỏ hoa. Xưởng Petitewoodart. Giá bán lẻ, COD.",
 	"card": "custom",
 	"color": "8F2D2D",
 	"image": "/og.jpg"

@@ -7,6 +7,11 @@ export const SHOP = {
   email: "",
 } as const;
 
+/** Tab title and share card. Keep in sync with src/lib/og/site.json. */
+export const PAGE_TITLE = "Petitewoodart — đồ gỗ cắt laser";
+export const PAGE_DESCRIPTION =
+  "Tag gỗ Tết, dây chữ treo cửa, lịch, thư pháp, đèn Halloween, đồ Noel và giỏ hoa. Xưởng Petitewoodart. Giá bán lẻ, COD.";
+
 /** 23 tháng Chạp Bính Ngọ — 30/01/2027 */
 export const DEADLINE_23 = new Date("2027-01-30T23:59:59+07:00");
 /** 28 tháng Chạp — 04/02/2027 */

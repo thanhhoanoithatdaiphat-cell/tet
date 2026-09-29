@@ -2,14 +2,15 @@ import { i as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { o as useSeason } from "./seasons-t_J3k4e-.mjs";
+import { a as cn, c as minPrice, d as spotlight, l as resolveSku, n as CATEGORIES, o as filterCatalog, s as formatVnd, t as CATALOG, u as seasonBanner } from "./catalog-DXj0khw4.mjs";
 import { n as create, t as persist } from "../_libs/zustand.mjs";
 import { _ as Check, a as ShoppingBag, c as Plus, d as MessageCircle, o as Send, r as Trash2, s as Search, t as X, u as Minus } from "../_libs/lucide-react.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-import { r as useMediaUrl } from "./router-B0Jatq2T.mjs";
-import { _ as resolveSku, b as spotlight, g as minPrice, h as getProduct, i as ZALO_PRESET, m as formatVnd, n as CATEGORIES, p as filterCatalog, s as cn, t as CATALOG, y as seasonBanner } from "./brain-B76nEHmp.mjs";
-import { a as consultShop, c as useOps, i as SHOP, l as zaloHref, n as Input, r as Label, t as Button } from "./shop-ai-BKYKjlq5.mjs";
+import { i as SHOP, r as useMediaUrl } from "./router-Ig1G8LPG.mjs";
+import { c as getProduct, n as ZALO_PRESET } from "./brain-DS--dyyA.mjs";
+import { c as zaloHref, i as consultShop, n as Input, r as Label, s as useOps, t as Button } from "./shop-ai-Breg01iC.mjs";
 import { t as Drawer } from "../_libs/vaul.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-7TeFq-mH.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BpxI40Du.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var Drawer$1 = Drawer.Root;
@@ -24,7 +25,7 @@ function DrawerOverlay({ className, ...props }) {
 }
 function DrawerContent({ className, children, ...props }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DrawerPortal, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DrawerOverlay, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Drawer.Content, {
-		className: cn("fixed inset-x-0 bottom-0 z-50 mt-24 flex max-h-[92vh] flex-col rounded-t-2xl bg-surface text-foreground outline-none", className),
+		className: cn("fixed inset-x-0 bottom-0 z-50 mt-12 flex max-h-[92dvh] flex-col rounded-t-2xl bg-surface text-foreground outline-none", className),
 		...props,
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mx-auto mt-3 h-1 w-12 rounded-full bg-border" }), children]
 	})] });
@@ -99,7 +100,7 @@ var useShop = create()(persist((set, get) => ({
 			orders: [order, ...s.orders],
 			cart: []
 		}));
-		import("./shop-ai-BKYKjlq5.mjs").then((n) => n.s).then((n) => n.o).then(({ useOps }) => {
+		import("./shop-ai-Breg01iC.mjs").then((n) => n.o).then((n) => n.o).then(({ useOps }) => {
 			const ops = useOps.getState();
 			for (const line of items) ops.consumeStock(line.id, line.qty);
 			const first = items[0];
@@ -457,10 +458,10 @@ function ShopChat({ lift, onOpenChange }) {
 			children: "Hỏi giá"
 		})]
 	}), open && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "fixed inset-x-0 bottom-0 z-50 flex h-[min(100dvh,36rem)] max-h-[100dvh] flex-col overflow-hidden rounded-t-2xl border border-border bg-surface shadow-xl sm:inset-x-auto sm:right-4 sm:bottom-4 sm:h-auto sm:max-h-[min(36rem,85dvh)] sm:w-[24rem] sm:rounded-2xl",
+		className: "fixed inset-0 z-50 flex h-dvh max-h-dvh flex-col overflow-hidden bg-surface sm:inset-auto sm:right-4 sm:bottom-4 sm:h-auto sm:max-h-[min(36rem,85dvh)] sm:w-[24rem] sm:rounded-2xl sm:border sm:border-border sm:shadow-xl",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center justify-between border-b border-border px-4 py-3",
+				className: "flex items-center justify-between border-b border-border px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 					className: "font-display text-lg leading-none",
 					children: ["Hỏi shop · ", season.name]
@@ -557,7 +558,7 @@ function ProductRail({ spots, onOpen }) {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 			className: cn("flex w-max", !reduce && "animate-marquee", paused && "marquee-paused"),
 			children: loop.map((spot, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-				className: "w-44 shrink-0 pr-3 sm:w-72",
+				className: "w-[58vw] max-w-60 shrink-0 pr-3 sm:w-72 sm:max-w-none",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 					type: "button",
 					onClick: () => onOpen(spot.item),
@@ -567,10 +568,10 @@ function ProductRail({ spots, onOpen }) {
 							className: "relative block overflow-hidden rounded-xl border border-border bg-surface",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShopImg, {
 								src: spot.item.image,
-								alt: "",
+								alt: spot.item.name,
 								className: "aspect-square w-full object-cover object-top"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "absolute top-2 left-2 inline-flex min-h-6 items-center rounded-full bg-primary px-2 text-xs text-primary-foreground",
+								className: "absolute top-2 left-2 inline-flex max-w-[calc(100%-1rem)] items-center rounded-full bg-primary px-2 py-0.5 text-xs leading-tight text-primary-foreground",
 								children: spot.reason
 							})]
 						}),
@@ -780,59 +781,63 @@ function LandingPage() {
 	];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		"data-season": season.id,
-		className: "min-h-screen bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] text-foreground md:pb-10",
+		className: cn("min-h-screen bg-background text-foreground", count > 0 ? "pb-[calc(4.75rem+env(safe-area-inset-bottom))] md:pb-10" : "pb-16 md:pb-10"),
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
-				className: "sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-md",
+				className: "md:sticky md:top-0 md:z-30 md:border-b md:border-border md:bg-background/95 md:backdrop-blur-md",
 				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "mx-auto flex h-14 max-w-6xl items-center gap-3 px-4",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-								href: "#hang",
-								className: "font-display text-lg leading-none tracking-tight",
-								children: SHOP.name
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "hidden text-sm text-muted-foreground sm:block",
-								children: "Đồ gỗ cắt laser"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "ml-auto",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-									size: "sm",
-									onClick: () => shop.openCheckout(),
-									className: "relative",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, {}),
-										"Giỏ",
-										count > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-surface text-xs font-medium text-primary",
-											children: count
-										})
-									]
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-md md:static md:border-0 md:bg-transparent md:backdrop-blur-none",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mx-auto flex h-12 max-w-6xl items-center gap-3 px-3 sm:h-14 sm:px-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+									href: "#hang",
+									className: "font-display text-lg leading-none tracking-tight",
+									children: SHOP.name
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "hidden text-sm text-muted-foreground sm:block",
+									children: "Đồ gỗ cắt laser"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "ml-auto",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+										size: "sm",
+										onClick: () => shop.openCheckout(),
+										className: "relative h-10 px-3 text-sm",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, {}),
+											"Giỏ",
+											count > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-surface text-xs font-medium text-primary",
+												children: count
+											})
+										]
+									})
 								})
-							})
-						]
+							]
+						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "mx-auto max-w-6xl px-4 pb-3",
+						className: "mx-auto max-w-6xl px-3 pt-3 sm:px-4",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 							className: "flex h-11 items-center gap-2 rounded-lg border border-border bg-surface px-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "size-4 text-muted-foreground" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "size-4 shrink-0 text-muted-foreground" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 								value: q,
 								onChange: (e) => {
 									setQ(e.target.value);
 									if (e.target.value.trim()) setCat("all");
 								},
-								placeholder: "Tìm tag, dây chữ, lịch, giỏ hoa…",
+								placeholder: "Tìm tag, dây chữ, lịch…",
 								"aria-label": "Tìm món",
+								enterKeyHint: "search",
 								className: "h-full w-full bg-transparent text-base outline-none"
 							})]
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "flex gap-2 overflow-x-auto px-4 pb-3",
+						className: "chip-row mt-2 flex gap-2 overflow-x-auto px-3 pb-3 sm:px-4",
 						children: chips.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							type: "button",
 							onClick: () => {
@@ -850,7 +855,7 @@ function LandingPage() {
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "h-1 bg-primary" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "mx-auto max-w-6xl px-4 pt-4 pb-4 sm:pt-6",
+						className: "mx-auto max-w-6xl px-3 pt-4 pb-3 sm:px-4 sm:pt-6 sm:pb-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex items-baseline justify-between gap-3",
@@ -874,7 +879,7 @@ function LandingPage() {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-								className: "mt-2 max-w-2xl font-display text-3xl leading-tight sm:text-5xl",
+								className: "mt-2 max-w-2xl font-display text-[1.7rem] leading-[1.15] sm:text-5xl",
 								children: banner.title
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
@@ -900,7 +905,7 @@ function LandingPage() {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
 				id: "hang",
-				className: "mx-auto max-w-6xl px-4 py-4",
+				className: "mx-auto max-w-6xl scroll-mt-14 px-3 py-4 sm:px-4",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 						className: "text-sm text-muted-foreground",
@@ -910,7 +915,7 @@ function LandingPage() {
 						className: "py-16 text-center text-sm text-muted-foreground",
 						children: "Không có món khớp. Thử từ khác hoặc chọn Tất cả."
 					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
-						className: "mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4",
+						className: "mt-3 grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3 lg:grid-cols-4",
 						children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
 							className: "flex h-full flex-col overflow-hidden rounded-xl border border-border bg-surface",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
@@ -919,13 +924,13 @@ function LandingPage() {
 								className: "block w-full text-left",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShopImg, {
 									src: item.image,
-									alt: "",
+									alt: item.name,
 									className: "aspect-square w-full bg-muted object-cover object-top"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "p-3",
+									className: "p-2.5 sm:p-3",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: "text-xs text-muted-foreground",
+											className: "text-[11px] text-muted-foreground",
 											children: CATEGORIES.find((c) => c.id === item.category)?.label
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
@@ -938,7 +943,7 @@ function LandingPage() {
 												item.sizes ? "Từ " : "",
 												formatVnd(minPrice(item)),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-													className: "font-normal text-muted-foreground",
+													className: "mt-0.5 block font-normal text-xs text-muted-foreground",
 													children: [" / ", item.unit]
 												})
 											]
@@ -946,10 +951,9 @@ function LandingPage() {
 									]
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "mt-auto px-3 pb-3",
+								className: "mt-auto px-2.5 pb-2.5 sm:px-3 sm:pb-3",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-									className: "w-full",
-									size: "sm",
+									className: "h-10 w-full text-sm",
 									onClick: () => addPlain(item),
 									children: item.sizes?.length ? "Chọn size" : "Thêm"
 								})
@@ -973,7 +977,7 @@ function LandingPage() {
 									"Zalo / gọi:",
 									" ",
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-										className: "text-foreground",
+										className: "inline-flex min-h-11 items-center text-foreground",
 										href: `tel:${tel}`,
 										children: tel.replace(/(\d{4})(\d{3})(\d{3})/, "$1 $2 $3")
 									})
@@ -1013,11 +1017,11 @@ function LandingPage() {
 				className: "fixed inset-0 z-50 flex items-end justify-center bg-foreground/40 sm:items-center",
 				onClick: () => setOpenId(null),
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-t-2xl bg-surface sm:rounded-2xl",
+					className: "flex max-h-[100dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-2xl bg-surface sm:max-h-[88vh] sm:rounded-2xl",
 					onClick: (e) => e.stopPropagation(),
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center justify-between px-4 py-3",
+							className: "flex shrink-0 items-center justify-between px-4 py-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "text-xs tracking-wide text-muted-foreground uppercase",
 								children: CATEGORIES.find((c) => c.id === open.category)?.label
@@ -1025,70 +1029,71 @@ function LandingPage() {
 								type: "button",
 								onClick: () => setOpenId(null),
 								"aria-label": "Đóng",
-								className: "flex size-10 items-center justify-center",
+								className: "flex size-11 items-center justify-center",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "size-5" })
 							})]
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShopImg, {
-							src: open.image,
-							alt: "",
-							className: "mx-auto aspect-square w-full bg-muted object-cover object-top"
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "min-h-0 flex-1 overflow-y-auto",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShopImg, {
+								src: open.image,
+								alt: open.name,
+								className: "aspect-[5/4] max-h-[38vh] w-full bg-muted object-cover object-top sm:aspect-square sm:max-h-none"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "px-4 py-4",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+										className: "font-display text-2xl leading-tight",
+										children: open.name
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "mt-2 text-sm leading-relaxed",
+										children: open.blurb
+									}),
+									open.sizes && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "mt-4 flex gap-2",
+										children: open.sizes.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											"data-size": s.id,
+											onClick: () => setSizeId(s.id),
+											className: cn("min-h-11 flex-1 rounded-lg px-2 py-2 text-sm", sizeId === s.id ? "bg-primary text-primary-foreground" : "bg-muted"),
+											children: [s.label, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "mt-0.5 block text-xs opacity-80",
+												children: formatVnd(s.price)
+											})]
+										}, s.id))
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "mt-4 font-display text-3xl tabular-nums",
+										children: [formatVnd(resolveSku(open.sizes?.length && sizeId ? `${open.id}--${sizeId}` : open.id)?.price ?? open.price), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "ml-1 font-sans text-base text-muted-foreground",
+											children: ["/ ", open.unit]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "mt-1 text-xs text-muted-foreground",
+										children: "Giá bán lẻ. Từ 20 cái có giá sỉ, nhắn Zalo."
+									})
+								]
+							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "px-4 py-4",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-									className: "font-display text-2xl leading-tight",
-									children: open.name
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-2 text-sm leading-relaxed",
-									children: open.blurb
-								}),
-								open.sizes && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "mt-4 flex gap-2",
-									children: open.sizes.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-										type: "button",
-										"data-size": s.id,
-										onClick: () => setSizeId(s.id),
-										className: cn("min-h-11 flex-1 rounded-lg px-2 py-2 text-sm", sizeId === s.id ? "bg-primary text-primary-foreground" : "bg-muted"),
-										children: [
-											s.label,
-											" · ",
-											formatVnd(s.price)
-										]
-									}, s.id))
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									className: "mt-4 font-display text-3xl tabular-nums",
-									children: [formatVnd(resolveSku(open.sizes?.length && sizeId ? `${open.id}--${sizeId}` : open.id)?.price ?? open.price), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-										className: "ml-1 font-sans text-base text-muted-foreground",
-										children: ["/ ", open.unit]
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-1 text-xs text-muted-foreground",
-									children: "Giá bán lẻ. Từ 20 cái có giá sỉ, nhắn Zalo."
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "mt-4 grid gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-										size: "lg",
-										onClick: () => {
-											const id = open.sizes?.length && sizeId ? `${open.id}--${sizeId}` : open.id;
-											shop.add(id);
-											toast.success("Đã thêm vào giỏ");
-											setOpenId(null);
-										},
-										children: "Thêm vào giỏ"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-										size: "lg",
-										variant: "secondary",
-										onClick: () => zalo(open.sizes?.length && sizeId ? `${open.id}--${sizeId}` : open.id),
-										children: "Nhắn Zalo món này"
-									})]
-								})
-							]
+							className: "grid shrink-0 gap-2 border-t border-border px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								size: "lg",
+								onClick: () => {
+									const id = open.sizes?.length && sizeId ? `${open.id}--${sizeId}` : open.id;
+									shop.add(id);
+									toast.success("Đã thêm vào giỏ");
+									setOpenId(null);
+								},
+								children: "Thêm vào giỏ"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								size: "lg",
+								variant: "secondary",
+								onClick: () => zalo(open.sizes?.length && sizeId ? `${open.id}--${sizeId}` : open.id),
+								children: "Nhắn Zalo món này"
+							})]
 						})
 					]
 				})

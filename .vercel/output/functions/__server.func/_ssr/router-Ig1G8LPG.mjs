@@ -2,11 +2,14 @@ import { i as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { f as createRouter, g as createRootRoute, h as createFileRoute, l as Scripts, m as lazyRouteComponent, p as Outlet, u as HeadContent, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
+import { c as minPrice, t as CATALOG } from "./catalog-DXj0khw4.mjs";
 import { n as create } from "../_libs/zustand.mjs";
 import { n as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as union, i as string, n as number, r as object, t as literal } from "../_libs/zod.mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/rolldown-runtime-D7D4PA-g.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Ig1G8LPG.js
+var import_react = /* @__PURE__ */ __toESM(require_react());
+var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
 var __exportAll = (all, no_symbols) => {
 	let target = {};
@@ -17,10 +20,17 @@ var __exportAll = (all, no_symbols) => {
 	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
 	return target;
 };
-//#endregion
-//#region node_modules/.nitro/vite/services/ssr/assets/router-B0Jatq2T.js
-var import_react = /* @__PURE__ */ __toESM(require_react());
-var import_jsx_runtime = require_jsx_runtime();
+var SHOP = {
+	name: "Petitewoodart",
+	tagline: "Đồ gỗ cắt laser · giá bán lẻ",
+	zaloUrl: "https://zalo.me/0901741879",
+	phoneDisplay: "0901 741 879",
+	phoneTel: "0901741879",
+	email: ""
+};
+/** Tab title and share card. Keep in sync with src/lib/og/site.json. */
+var PAGE_TITLE = "Petitewoodart — đồ gỗ cắt laser";
+var PAGE_DESCRIPTION = "Tag gỗ Tết, dây chữ treo cửa, lịch, thư pháp, đèn Halloween, đồ Noel và giỏ hoa. Xưởng Petitewoodart. Giá bán lẻ, COD.";
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
 function errorMessage(error) {
 	if (error instanceof Error && error.message) return error.message;
@@ -412,8 +422,7 @@ var useMedia = create((set, get) => ({
 function useMediaUrl(path) {
 	return useMedia((s) => s.urls[path] ?? path);
 }
-var styles_default = "/assets/styles-D-i6PfIz.css";
-var APP_NAME = "Petitewoodart";
+var styles_default = "/assets/styles-C-uORTRD.css";
 function MediaHydrator() {
 	(0, import_react.useEffect)(() => {
 		useMedia.getState().hydrate();
@@ -428,10 +437,14 @@ var Route$2 = createRootRoute({
 				name: "viewport",
 				content: "width=device-width, initial-scale=1"
 			},
-			{ title: APP_NAME },
+			{ title: PAGE_TITLE },
 			{
 				name: "description",
-				content: "Đồ gỗ cắt laser Petitewoodart. Tag Tết, dây chữ, lịch, thư pháp, Noel, Halloween, giỏ hoa. Giá bán lẻ, COD."
+				content: PAGE_DESCRIPTION
+			},
+			{
+				property: "og:locale",
+				content: "vi_VN"
 			},
 			{
 				name: "theme-color",
@@ -474,12 +487,61 @@ var Route$2 = createRootRoute({
 		] })]
 	})
 });
-var $$splitComponentImporter$1 = () => import("./routes-7TeFq-mH.mjs");
-var Route$1 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./van-hanh-BZupadaN.mjs");
+var $$splitComponentImporter$1 = () => import("./routes-BpxI40Du.mjs");
+var jsonLd = JSON.stringify({
+	"@context": "https://schema.org",
+	"@graph": [{
+		"@type": "OnlineStore",
+		name: SHOP.name,
+		description: PAGE_DESCRIPTION,
+		telephone: "+84901741879",
+		currenciesAccepted: "VND",
+		paymentAccepted: "Cash",
+		areaServed: "VN"
+	}, {
+		"@type": "ItemList",
+		name: PAGE_TITLE,
+		itemListElement: CATALOG.map((item, index) => ({
+			"@type": "ListItem",
+			position: index + 1,
+			item: {
+				"@type": "Product",
+				name: item.name,
+				description: item.blurb,
+				image: item.image,
+				brand: {
+					"@type": "Brand",
+					name: SHOP.name
+				},
+				offers: {
+					"@type": "Offer",
+					priceCurrency: "VND",
+					price: minPrice(item)
+				}
+			}
+		}))
+	}]
+}).replaceAll("<", "\\u003c");
+var Route$1 = createFileRoute("/")({
+	component: lazyRouteComponent($$splitComponentImporter$1, "component"),
+	head: () => ({
+		links: [{
+			rel: "canonical",
+			href: "/"
+		}],
+		scripts: [{
+			type: "application/ld+json",
+			children: jsonLd
+		}]
+	})
+});
+var $$splitComponentImporter = () => import("./van-hanh-BVOJ_bLm.mjs");
 var Route = createFileRoute("/van-hanh")({
 	component: lazyRouteComponent($$splitComponentImporter, "component"),
-	head: () => ({ meta: [{ title: "Vận hành · Petitewoodart" }] })
+	head: () => ({ meta: [{ title: "Vận hành · Petitewoodart" }, {
+		name: "robots",
+		content: "noindex, nofollow"
+	}] })
 });
 var rootRouteChildren = {
 	IndexRoute: Route$1.update({
@@ -502,4 +564,4 @@ function getRouter() {
 	});
 }
 //#endregion
-export { __exportAll as i, useMedia as n, useMediaUrl as r, router_exports as t };
+export { __exportAll as a, SHOP as i, useMedia as n, useMediaUrl as r, router_exports as t };
