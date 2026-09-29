@@ -36,28 +36,36 @@ function requestHost(event: GrokPwaEvent): string {
   );
 }
 
-function injectHeadStreaming(response: Response, host: string): Response {
-  const injector = createHeadInjector({
-    host,
-    site: grokOgIdentity.site,
-  });
-  const transformed = response.body!.pipeThrough(
-    new TransformStream<Uint8Array, Uint8Array>({
-      transform(chunk, controller) {
-        for (const out of injector.push(chunk)) controller.enqueue(out);
-      },
-      flush(controller) {
-        for (const out of injector.flush()) controller.enqueue(out);
-      },
-    }),
-  );
-  const headers = new Headers(response.headers);
-  headers.delete("content-length");
-  return new Response(transformed, {
-    status: response.status,
-    statusText: response.statusText,
-    headers,
-  });
+async function injectHead(response: Response, host: string): Promise<Response> {
+  // Buffer instead of pipeThrough. On Vercel the streamed body can throw while
+  // the response is still being assembled, and Nitro turns that into a bare
+  // {"error":true,"status":500,"unhandled":true} with no page.
+  let html = "";
+  try {
+    html = await response.text();
+    const injector = createHeadInjector({
+      host,
+      site: grokOgIdentity.site,
+    });
+    const parts = [...injector.push(new TextEncoder().encode(html)), ...injector.flush()];
+    const headers = new Headers(response.headers);
+    headers.delete("content-length");
+    return new Response(Buffer.concat(parts), {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
+  } catch (err) {
+    console.error("[grok-pwa] head inject failed", err);
+    if (!html) throw err;
+    const headers = new Headers(response.headers);
+    headers.delete("content-length");
+    return new Response(html, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
+  }
 }
 
 export default async function grokPwaMiddleware(
@@ -105,7 +113,7 @@ export default async function grokPwaMiddleware(
     String(result.headers.get("content-type") ?? "").includes("text/html") &&
     !result.headers.get("content-encoding")
   ) {
-    return injectHeadStreaming(result, requestHost(event));
+    return injectHead(result, requestHost(event));
   }
   return result;
 }

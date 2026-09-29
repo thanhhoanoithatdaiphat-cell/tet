@@ -43,7 +43,7 @@ var SHARE_META_KEYS = /* @__PURE__ */ new Set([
 	"x:game:image:width",
 	"x:game:image:height"
 ]);
-function escapeHtml(value) {
+function escapeHtml$1(value) {
 	return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;");
 }
 /** Inverse of escapeHtml. Decode &amp; last so a single pass undoes one encode. */
@@ -115,7 +115,7 @@ function stripInstallParams(url) {
 	return rest ? `${path}?${rest}` : path;
 }
 function renderInstallPageHtml(template, { host, url } = {}) {
-	return String(template).replaceAll("{{APP_NAME}}", escapeHtml(appNameFromHost(host))).replaceAll("{{APP_URL}}", escapeHtml(stripInstallParams(url)));
+	return String(template).replaceAll("{{APP_NAME}}", escapeHtml$1(appNameFromHost(host))).replaceAll("{{APP_URL}}", escapeHtml$1(stripInstallParams(url)));
 }
 function renderWebManifest(hostHeader) {
 	const name = appNameFromHost(hostHeader);
@@ -139,7 +139,7 @@ function grokPwaHeadTags(appName = DEFAULT_APP_NAME) {
 	return [
 		["manifest", "<link rel=\"manifest\" href=\"/__grok/manifest.webmanifest\">"],
 		["apple-touch-icon", "<link rel=\"apple-touch-icon\" href=\"/__grok/icon-180.png\">"],
-		["apple-mobile-web-app-title", `<meta name="apple-mobile-web-app-title" content="${escapeHtml(appName)}">`],
+		["apple-mobile-web-app-title", `<meta name="apple-mobile-web-app-title" content="${escapeHtml$1(appName)}">`],
 		["apple-mobile-web-app-status-bar-style", "<meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\">"],
 		["theme-color", "<meta name=\"theme-color\" content=\"#000000\">"]
 	];
@@ -161,11 +161,11 @@ function grokXCreatorHeadTags(creator = readXCreator(), creatorId = readXCreator
 	const name = String(creator ?? "").trim();
 	const id = String(creatorId ?? "").trim();
 	if (!name || !id) return [];
-	return [`<meta property="x:creator" content="${escapeHtml(name)}">`, `<meta property="x:creator:id" content="${escapeHtml(id)}">`];
+	return [`<meta property="x:creator" content="${escapeHtml$1(name)}">`, `<meta property="x:creator:id" content="${escapeHtml$1(id)}">`];
 }
 /** Platform "Created with Grok" banner — injected into every HTML document. */
 function grokExtensionsHeadTags(projectId = readGrokProjectId()) {
-	const id = escapeHtml(projectId);
+	const id = escapeHtml$1(projectId);
 	const tags = [];
 	if (projectId) tags.push(`<meta name="grok-project-id" content="${id}">`);
 	tags.push(`<script src="${GROK_EXTENSIONS_SCRIPT_SRC}"${projectId ? ` data-project-id="${id}"` : ""} defer><\/script>`);
@@ -244,9 +244,9 @@ function applyCustomCardFromFs(site, cwd) {
 function grokOgHeadTags({ host = "", appName = DEFAULT_APP_NAME, site = {}, documentTitle = "", cwd = process.cwd() } = {}) {
 	const title = resolveOgTitle(site, appName, host, documentTitle);
 	const publicHost = resolvePublicHost(host);
-	const tags = [`<meta name="twitter:card" content="summary_large_image">`, `<meta property="og:title" content="${escapeHtml(title)}">`];
+	const tags = [`<meta name="twitter:card" content="summary_large_image">`, `<meta property="og:title" content="${escapeHtml$1(title)}">`];
 	const description = String(site.description ?? "").trim();
-	if (description) tags.push(`<meta property="og:description" content="${escapeHtml(description)}">`);
+	if (description) tags.push(`<meta property="og:description" content="${escapeHtml$1(description)}">`);
 	if (String(site.type ?? "").toLowerCase() === "x:game") tags.push(`<meta property="og:type" content="x:game">`);
 	if (publicHost) {
 		const asset = resolveOgCardAsset(site, cwd);
@@ -254,13 +254,13 @@ function grokOgHeadTags({ host = "", appName = DEFAULT_APP_NAME, site = {}, docu
 		let image = custom ? `https://${publicHost}${asset.startsWith("/") ? asset : `/${asset}`}` : `${ogServiceUrl()}/v1/card.png?host=${encodeURIComponent(publicHost)}&title=${encodeURIComponent(title)}`;
 		const color = !custom ? placeholderCardColor(site) : "";
 		if (color) image += `&color=${encodeURIComponent(color)}`;
-		tags.push(`<meta property="og:image" content="${escapeHtml(image)}">`);
+		tags.push(`<meta property="og:image" content="${escapeHtml$1(image)}">`);
 		tags.push(`<meta property="og:image:width" content="1200">`);
 		tags.push(`<meta property="og:image:height" content="630">`);
 		const banner = String(site.banner ?? "").trim();
 		if (banner) {
 			const bannerUrl = `https://${publicHost}${banner.startsWith("/") ? banner : `/${banner}`}`;
-			tags.push(`<meta property="x:game:image" content="${escapeHtml(bannerUrl)}">`);
+			tags.push(`<meta property="x:game:image" content="${escapeHtml$1(bannerUrl)}">`);
 			tags.push(`<meta property="x:game:image:width" content="1200">`);
 			tags.push(`<meta property="x:game:image:height" content="264">`);
 		}
@@ -315,8 +315,8 @@ function injectGrokPwaHead(html, ctx = {}) {
 		cwd
 	}).join(""));
 	if (!next.includes("/grok-app-builder/extensions.js")) missing.push(...grokExtensionsHeadTags(projectId));
-	else if (projectId && !next.includes("name=\"grok-project-id\"")) missing.push(`<meta name="grok-project-id" content="${escapeHtml(projectId)}">`);
-	if (projectId && !next.includes("property=\"grok:app_id\"") && !next.includes("property='grok:app_id'")) missing.push(`<meta property="grok:app_id" content="${escapeHtml(projectId)}">`);
+	else if (projectId && !next.includes("name=\"grok-project-id\"")) missing.push(`<meta name="grok-project-id" content="${escapeHtml$1(projectId)}">`);
+	if (projectId && !next.includes("property=\"grok:app_id\"") && !next.includes("property='grok:app_id'")) missing.push(`<meta property="grok:app_id" content="${escapeHtml$1(projectId)}">`);
 	const creatorTags = grokXCreatorHeadTags(creator, creatorId);
 	if (creatorTags.length > 0) {
 		if (!(next.includes("property=\"x:creator\" content=") || next.includes("property='x:creator' content="))) missing.push(creatorTags[0]);
@@ -393,26 +393,33 @@ function createHeadInjector(ctx = {}) {
 function requestHost(event) {
 	return event.req.headers.get("x-forwarded-host") ?? event.req.headers.get("host") ?? event.url.host;
 }
-function injectHeadStreaming(response, host) {
-	const injector = createHeadInjector({
-		host,
-		site: grokOgIdentity.site
-	});
-	const transformed = response.body.pipeThrough(new TransformStream({
-		transform(chunk, controller) {
-			for (const out of injector.push(chunk)) controller.enqueue(out);
-		},
-		flush(controller) {
-			for (const out of injector.flush()) controller.enqueue(out);
-		}
-	}));
-	const headers = new Headers(response.headers);
-	headers.delete("content-length");
-	return new Response(transformed, {
-		status: response.status,
-		statusText: response.statusText,
-		headers
-	});
+async function injectHead(response, host) {
+	let html = "";
+	try {
+		html = await response.text();
+		const injector = createHeadInjector({
+			host,
+			site: grokOgIdentity.site
+		});
+		const parts = [...injector.push(new TextEncoder().encode(html)), ...injector.flush()];
+		const headers = new Headers(response.headers);
+		headers.delete("content-length");
+		return new Response(Buffer.concat(parts), {
+			status: response.status,
+			statusText: response.statusText,
+			headers
+		});
+	} catch (err) {
+		console.error("[grok-pwa] head inject failed", err);
+		if (!html) throw err;
+		const headers = new Headers(response.headers);
+		headers.delete("content-length");
+		return new Response(html, {
+			status: response.status,
+			statusText: response.statusText,
+			headers
+		});
+	}
 }
 async function grokPwaMiddleware(event, next) {
 	if ((event.req.method ?? "GET").toUpperCase() !== "GET") return next();
@@ -434,7 +441,7 @@ async function grokPwaMiddleware(event, next) {
 	}
 	if (!isDocumentPath(path)) return next();
 	const result = await next();
-	if (result instanceof Response && result.body && String(result.headers.get("content-type") ?? "").includes("text/html") && !result.headers.get("content-encoding")) return injectHeadStreaming(result, requestHost(event));
+	if (result instanceof Response && result.body && String(result.headers.get("content-type") ?? "").includes("text/html") && !result.headers.get("content-encoding")) return injectHead(result, requestHost(event));
 	return result;
 }
 //#endregion
@@ -474,6 +481,33 @@ var findRoute = /* @__PURE__ */ (() => {
 })();
 var globalMiddleware = [toEventHandler(grokPwaMiddleware)].filter(Boolean);
 //#endregion
+//#region node_modules/nitro/dist/runtime/internal/error/utils.mjs
+function defineNitroErrorHandler(handler) {
+	return handler;
+}
+//#endregion
+//#region server/error-handler.ts
+function statusOf(error) {
+	const status = Number(error.status || error.statusCode || 500);
+	return status >= 400 && status <= 599 ? status : 500;
+}
+function escapeHtml(value) {
+	return value.replaceAll("&", "&").replaceAll("<", "<").replaceAll(">", ">");
+}
+var error_handler_default$1 = defineNitroErrorHandler((error) => {
+	const status = statusOf(error);
+	console.error("[petitewoodart]", error);
+	if (status === 404) return new Response("Không thấy trang này.", {
+		status: 404,
+		headers: { "content-type": "text/plain; charset=utf-8" }
+	});
+	const body = `<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Petitewoodart</title><body style="font-family:sans-serif;padding:24px;line-height:1.5"><p>Trang chưa mở được.</p><p>${escapeHtml(error instanceof Error && error.message ? error.message : "Lỗi máy chủ")}</p></body></html>`;
+	return new Response(body, {
+		status,
+		headers: { "content-type": "text/html; charset=utf-8" }
+	});
+});
+//#endregion
 //#region node_modules/nitro/dist/runtime/internal/error/prod.mjs
 var errorHandler = (error, event) => {
 	const res = defaultHandler(error, event);
@@ -511,7 +545,7 @@ function defaultHandler(error, event) {
 }
 //#endregion
 //#region #nitro/virtual/error-handler
-var errorHandlers = [errorHandler];
+var errorHandlers = [error_handler_default$1, errorHandler];
 async function error_handler_default(error, event) {
 	for (const handler of errorHandlers) try {
 		const response = await handler(error, event, { defaultHandler });
