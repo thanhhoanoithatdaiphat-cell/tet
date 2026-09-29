@@ -176,6 +176,9 @@ export default defineConfig(({ command, isPreview }) => ({
             // false, so removing this silently unwires /?install=1 on deploys.
             serverDir: "./server",
             errorHandler: "./server/error-handler.ts",
+            // Vercel drops traced node_modules (tslib) from the function.
+            // Bundle deps in so /var/task never has to resolve a package.
+            noExternals: true,
           }),
         ]
       : []),
