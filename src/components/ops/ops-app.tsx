@@ -16,6 +16,7 @@ import { OrdersTab } from "./orders-tab";
 import { PostsTab } from "./posts-tab";
 import { MediaTab } from "./media-tab";
 import { lockOps } from "./pin-gate";
+import { SEASON_CHOICES, previewSeasonId, setPreviewSeason } from "@/lib/seasons";
 
 const TABS = [
   { id: "ban", label: "Việc của bạn", icon: ClipboardList },
@@ -48,10 +49,25 @@ export function OpsApp() {
       <header className="border-b border-border bg-surface">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <div>
-            <p className="font-display text-xl leading-none">Nhà Có Tết</p>
+            <p className="font-display text-xl leading-none">Petitewoodart</p>
             <p className="mt-1 hidden text-xs text-muted-foreground sm:block">Bàn vận hành · bot tư vấn · chốt cổng 5 điều · lịch bài</p>
           </div>
           <div className="flex items-center gap-3">
+            <label className="text-xs text-muted-foreground">
+              Xem mùa
+              <select
+                className="ml-2 h-9 rounded-md border border-border bg-background px-2 text-sm text-foreground"
+                defaultValue={previewSeasonId() ?? ""}
+                onChange={(e) => setPreviewSeason(e.target.value || null)}
+              >
+                <option value="">Theo lịch</option>
+                {SEASON_CHOICES.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+            </label>
             <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
               Trang bán
             </Link>

@@ -34,6 +34,50 @@
   --motion-slow: 400ms;
 }
 
+[data-season="halloween"] {
+  --color-background: #f3ece4;
+  --color-primary: #9a3412;
+  --color-accent: #3f2a22;
+  --color-muted: #efe2d4;
+  --color-border: #e4d3c2;
+  --color-ring: #9a3412;
+}
+
+[data-season="noel"] {
+  --color-background: #f2f5f3;
+  --color-primary: #1f4d3a;
+  --color-accent: #7f1d1d;
+  --color-muted: #e4ebe6;
+  --color-border: #d5e0d9;
+  --color-ring: #1f4d3a;
+}
+
+[data-season="vnwomen"],
+[data-season="women"],
+[data-season="valentine"] {
+  --color-background: #f8f1ee;
+  --color-primary: #9f3d56;
+  --color-muted: #f3e4e0;
+  --color-border: #ead6d0;
+  --color-ring: #9f3d56;
+}
+
+[data-season="trungthu"] {
+  --color-background: #f7f1e4;
+  --color-primary: #a16207;
+  --color-muted: #efe4cc;
+  --color-border: #e6d7b8;
+  --color-ring: #a16207;
+}
+
+[data-season="newyear"] {
+  --color-background: #f4f2ee;
+  --color-primary: #1e293b;
+  --color-muted: #e7e5e0;
+  --color-border: #ddd9d2;
+  --color-ring: #1e293b;
+}
+
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
@@ -63,15 +107,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .animate-marquee {
-    animation: none !important;
-  }
-}
-
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -81,6 +116,36 @@
   }
 }
 
+.moment-row {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.moment-row::-webkit-scrollbar {
+  display: none;
+}
+
+.marquee {
+  overflow: hidden;
+}
+
 .animate-marquee {
-  animation: marquee 32s linear infinite;
+  animation: marquee 36s linear infinite;
+}
+
+.marquee:hover .animate-marquee,
+.marquee-paused {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee {
+    animation: none;
+  }
+  .marquee {
+    overflow-x: auto;
+  }
 }

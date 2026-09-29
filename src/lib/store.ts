@@ -73,7 +73,7 @@ export const useShop = create<ShopState>()(
         const items = get().cart;
         const total = items.reduce((sum, l) => sum + getProduct(l.id).price * l.qty, 0);
         const order: Order = {
-          id: "NCT-" + Date.now().toString(36).toUpperCase(),
+          id: "PW-" + Date.now().toString(36).toUpperCase(),
           createdAt: new Date().toISOString(),
           payment: "cod",
           items,

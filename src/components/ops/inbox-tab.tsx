@@ -16,6 +16,7 @@ import {
 } from "@/lib/brain";
 import { getProduct } from "@/lib/products";
 import { useOps, type Thread } from "@/lib/ops-store";
+import { resolveSeason, useSeason } from "@/lib/seasons";
 import { cn, formatVnd } from "@/lib/utils";
 
 export function InboxTab() {
@@ -119,15 +120,16 @@ async function replyWithAi(threadId: string) {
     content: m.text,
   }));
   const last = [...thread.messages].reverse().find((m) => m.from === "khach")?.text ?? "";
-  const rules = draftReply(last, thread.suggestedSet);
+  const season = resolveSeason();
+  const rules = draftReply(last, thread.suggestedSet, season);
   let res;
   try {
-    res = await consultShop({ data: { messages: history, stock: ops.stock } });
+    res = await consultShop({ data: { messages: history, stock: ops.stock, seasonId: season.id } });
   } catch {
     res = null;
   }
   const reply = res?.reply ?? rules.reply;
-  const setId = res?.suggestedSet ?? detectSet(last) ?? rules.suggestedSet ?? thread.suggestedSet;
+  const setId = res?.suggestedSet ?? detectSet(last, season.products) ?? rules.suggestedSet ?? thread.suggestedSet;
   const phone = res?.phone ?? detectPhone(last) ?? thread.phone;
   const province = detectProvince(last);
   const address =
@@ -145,6 +147,7 @@ async function replyWithAi(threadId: string) {
 
 function ThreadPane({ thread }: { thread: Thread }) {
   const stock = useOps((s) => s.stock);
+  const season = useSeason();
   const markThread = useOps((s) => s.markThread);
   const pushMessage = useOps((s) => s.pushMessage);
   const placeFromInbox = useOps((s) => s.placeFromInbox);
@@ -161,8 +164,9 @@ function ThreadPane({ thread }: { thread: Thread }) {
         phone: phone.replace(/\D/g, ""),
         address,
         stock,
+        season,
       }),
-    [setId, phone, address, stock],
+    [setId, phone, address, stock, season],
   );
 
   function saveFields() {
@@ -178,7 +182,7 @@ function ThreadPane({ thread }: { thread: Thread }) {
     const lastKhach = [...thread.messages].reverse().find((m) => m.from === "khach");
     if (!lastKhach) return;
     setBusy(true);
-    const res = await polishCopy({ data: { kind: "inbox", text: lastKhach.text, hint: "Giữ đúng giọng shop, có thể chỉnh từ bản mẫu:\n" + draftReply(lastKhach.text, setId).reply } });
+    const res = await polishCopy({ data: { kind: "inbox", text: lastKhach.text, hint: "Giữ đúng giọng shop, có thể chỉnh từ bản mẫu:\n" + draftReply(lastKhach.text, setId, season).reply } });
     setBusy(false);
     if (!res.ok) {
       toast.error(res.error);

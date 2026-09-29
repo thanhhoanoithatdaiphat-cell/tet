@@ -6,7 +6,7 @@ import { useMedia } from "@/lib/media-store";
 import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "Nhà Có Tết";
+const APP_NAME = "Petitewoodart";
 
 function MediaHydrator() {
   useEffect(() => {
@@ -24,7 +24,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Set Tết hiện đại cho chung cư và nhà phố. Set cửa 399k, phòng khách 699k, cả nhà 999k. COD, giao trước Tết.",
+          "Đồ gỗ cắt laser Petitewoodart. Tag Tết, dây chữ, lịch, thư pháp, Noel, Halloween, giỏ hoa. Giá bán lẻ, COD.",
       },
       { name: "theme-color", content: "#8F2D2D" },
     ],

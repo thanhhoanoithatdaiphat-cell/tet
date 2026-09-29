@@ -4,9 +4,10 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SALE_CARDS } from "@/lib/brain";
+import { saleCards } from "@/lib/brain";
 import { DEFAULT_PIN_HASH, hashPin, isFourDigits } from "@/lib/ops-pin";
 import { SHOP } from "@/lib/config";
+import { useSeason } from "@/lib/seasons";
 import { useOps, zaloHref } from "@/lib/ops-store";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,8 @@ export function YouTab({
   const setSettings = useOps((s) => s.setSettings);
   const tasks = useOps((s) => s.tasks);
   const toggleTask = useOps((s) => s.toggleTask);
+  useSeason();
+  const cards = saleCards();
   const [openId, setOpenId] = useState(tasks.find((t) => !t.done)?.id ?? tasks[0]?.id);
   const [phone, setPhone] = useState(settings.zaloPhone);
   const [fb, setFb] = useState(settings.facebookPage);
@@ -140,7 +143,7 @@ export function YouTab({
           <h2 className="font-medium">8 thẻ dán vào Zalo OA / Manychat</h2>
           <p className="mt-1 text-xs text-muted-foreground">Copy nguyên. 30 ngày đầu không cần lập trình.</p>
           <ul className="mt-3 space-y-2">
-            {SALE_CARDS.map((c) => (
+            {cards.map((c) => (
               <li key={c.title} className="rounded-md border border-border p-3">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-medium">{c.title}</p>

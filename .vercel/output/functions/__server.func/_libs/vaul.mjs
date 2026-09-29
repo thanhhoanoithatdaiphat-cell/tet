@@ -1,5 +1,5 @@
 import { i as __toESM } from "../_runtime.mjs";
-import { v as require_react } from "./@radix-ui/react-accordion+[...].mjs";
+import { n as require_react } from "./@radix-ui/react-compose-refs+[...].mjs";
 import { a as DialogOverlay, c as DialogTrigger, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "./@radix-ui/react-dialog+[...].mjs";
 //#region node_modules/vaul/dist/index.mjs
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);

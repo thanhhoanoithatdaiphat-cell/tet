@@ -31,7 +31,7 @@ export function CheckoutDrawer() {
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!cart.length) {
-      toast.error("Chưa có set trong giỏ.");
+      toast.error("Giỏ đang trống.");
       return;
     }
     if (name.trim().length < 2 || phone.replace(/\D/g, "").length < 9 || address.trim().length < 8) {
@@ -71,7 +71,7 @@ export function CheckoutDrawer() {
           <DrawerDescription>
             {done
               ? "Mình liên hệ xác nhận trong ngày. Thanh toán khi nhận hàng."
-              : "Giao theo mốc Tết. Không cần chuyển khoản trước."}
+              : "Giao toàn quốc. Không cần chuyển khoản trước."}
           </DrawerDescription>
         </DrawerHeader>
 
@@ -83,10 +83,10 @@ export function CheckoutDrawer() {
               </div>
               <p className="font-display text-2xl">{done}</p>
               <p className="max-w-sm text-sm text-muted-foreground">
-                Giữ mã này. Tết này nhà bạn đã có lớp decor — mình báo ngày giao ngay.
+                Giữ mã này. Mình xác nhận đơn và báo ngày giao.
               </p>
               <Button className="w-full" onClick={() => { closeCheckout(); setDone(null); }}>
-                Tiếp tục xem set
+                Tiếp tục xem hàng
               </Button>
             </div>
           ) : (
@@ -94,7 +94,7 @@ export function CheckoutDrawer() {
               <ul className="divide-y divide-border rounded-xl border border-border bg-background">
                 {cart.length === 0 ? (
                   <li className="px-4 py-6 text-sm text-muted-foreground">
-                    Giỏ trống. Chọn một set 399k / 699k / 999k.
+                    Giỏ trống. Chọn món ở trang rồi thêm vào giỏ.
                   </li>
                 ) : (
                   cart.map((line) => {
@@ -104,7 +104,7 @@ export function CheckoutDrawer() {
                         <ShopImg
                           src={p.image}
                           alt=""
-                          className="size-14 rounded-md object-cover"
+                          className="size-14 rounded-md object-cover object-top"
                         />
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-medium">{p.name}</p>
@@ -176,12 +176,12 @@ export function CheckoutDrawer() {
                   />
                 </div>
                 <div className="grid gap-1.5">
-                  <Label htmlFor="note">Ghi chú tường / size (không bắt buộc)</Label>
+                  <Label htmlFor="note">Ghi chú (mẫu chữ, số lượng)</Label>
                   <Input
                     id="note"
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
-                    placeholder="Ví dụ: tường kem 2.4m, nhà thuê không khoan"
+                    placeholder="Ví dụ: tag 10cm, chữ Phúc, lấy 30 cái"
                   />
                 </div>
               </div>
@@ -196,7 +196,7 @@ export function CheckoutDrawer() {
                     Đặt hàng COD
                   </Button>
                   <Button type="button" size="lg" variant="secondary" className="w-full" onClick={zaloOrder}>
-                    Gửi ảnh phòng qua Zalo
+                    Nhắn Zalo đơn này
                   </Button>
                 </div>
               </div>

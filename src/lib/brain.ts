@@ -1,5 +1,5 @@
-import { DEADLINE_23, DEADLINE_28 } from "./config";
-import { getProduct, PRODUCTS, type ProductId } from "./products";
+import { getProduct, type ProductId } from "./products";
+import { resolveSeason, type SeasonView } from "./seasons";
 import { formatVnd } from "./utils";
 
 export type Channel = "zalo" | "facebook" | "tiktok";
@@ -37,8 +37,6 @@ export type DraftReply = {
 };
 
 export type StockMap = Record<ProductId, number>;
-
-export const DEADLINE_FAR = new Date("2027-01-25T23:59:59+07:00");
 
 type Province = { name: string; aliases: string[]; far: boolean };
 
@@ -104,12 +102,17 @@ export function detectProvince(text: string): Province | undefined {
   return undefined;
 }
 
-export function detectSet(text: string): ProductId | undefined {
+export function detectSet(text: string, products = resolveSeason().products): ProductId | undefined {
   const t = text.toLowerCase();
-  if (/999|cả nhà|ca nha|full nhà|full nha|combo nhà/.test(t)) return "nha";
-  if (/699|phòng khách|phong khach|set khách|set khach/.test(t)) return "khach";
-  if (/399|set cửa|set cua|cửa ra vào|cua ra vao/.test(t)) return "cua";
-  if (/cửa|cua/.test(t) && !/cửa sổ/.test(t)) return "cua";
+  if (/cả nhà|ca nha|full nhà|full nha|combo nhà|set nhà|set nha/.test(t)) return "nha";
+  if (/phòng khách|phong khach|set khách|set khach/.test(t)) return "khach";
+  if (/set cửa|set cua|cửa ra vào|cua ra vao/.test(t)) return "cua";
+  const compact = t.replace(/[\s.]/g, "");
+  for (const p of [...products].sort((a, b) => b.price - a.price)) {
+    const k = String(Math.round(p.price / 1000));
+    if (k.length >= 3 && new RegExp(`(?:^|\\D)${k}(?:\\D|$)`).test(compact)) return p.id;
+  }
+  if (/cửa|cua/.test(t) && !/cửa sổ|cua so/.test(t)) return "cua";
   return undefined;
 }
 
@@ -130,26 +133,27 @@ export function classifyIntent(text: string): Intent {
   return "khac";
 }
 
-function setLine(id: ProductId) {
-  const p = getProduct(id);
+function setLine(id: ProductId, season: SeasonView) {
+  const p = season.products.find((x) => x.id === id) ?? getProduct(id);
   return `${p.name} ${formatVnd(p.price)} — ${p.tagline}`;
 }
 
-export function draftReply(text: string, suggestedFromThread?: ProductId): DraftReply {
+export function draftReply(text: string, suggestedFromThread?: ProductId, season: SeasonView = resolveSeason()): DraftReply {
   const intent = classifyIntent(text);
-  const set = detectSet(text) ?? suggestedFromThread;
+  const set = detectSet(text, season.products) ?? suggestedFromThread;
   const province = detectProvince(text);
   const t = text.toLowerCase();
+  const prices = season.products.map((p) => formatVnd(p.price)).join(" / ");
 
   if (intent === "gia") {
     return {
       intent,
       suggestedSet: set ?? "khach",
       reply: [
-        "Ba set cố định, không mix lẻ:",
-        `· ${setLine("cua")} — tường cửa ~1m.`,
-        `· ${setLine("khach")} — phòng khách tường 2–3m. Bán chạy nhất.`,
-        `· ${setLine("nha")} — cửa + khách + bàn.`,
+        `Ba set ${season.name}, không mix lẻ:`,
+        `· ${setLine("cua", season)} — tường cửa ~1m.`,
+        `· ${setLine("khach", season)} — phòng khách tường 2–3m. Bán chạy nhất.`,
+        `· ${setLine("nha", season)} — cửa + khách + bàn.`,
         "Nhà bạn chung cư hay nhà phố? Gửi 1 ảnh tường mình chỉ đúng 1 set.",
       ].join("\n"),
     };
@@ -158,15 +162,15 @@ export function draftReply(text: string, suggestedFromThread?: ProductId): Draft
   if (intent === "nha") {
     const apt = /chung cư|chung cu|căn hộ|can ho|70m|80m/.test(t);
     const house = /nhà phố|nha pho|biệt thự|biet thu/.test(t);
-    const pick: ProductId = house ? "nha" : apt ? "khach" : "khach";
+    const pick: ProductId = house ? "nha" : "khach";
     return {
       intent,
       suggestedSet: pick,
       reply: apt
-        ? `Chung cư tường 2–3m thường lấy ${setLine("khach")}. Cửa hẹp thì thêm ${setLine("cua")}. Gửi ảnh phòng khách — mình đo ước lượng, không bán dư.`
+        ? `Chung cư tường 2–3m thường lấy ${setLine("khach", season)}. Cửa hẹp thì thêm ${setLine("cua", season)}. Gửi ảnh phòng khách — mình đo ước lượng, không bán dư.`
         : house
-          ? `Nhà phố hợp ${setLine("nha")} vì có cửa + khách cùng một theme. Nếu chỉ muốn một góc ảnh Tết: ${setLine("khach")}. Gửi ảnh cửa và phòng khách.`
-          : `Mình chỉ đúng 1 set theo tường, không bán rải. Chung cư → thường 699k. Nhà phố → 699 hoặc 999k. Gửi 1 ảnh phòng khách.`,
+          ? `Nhà phố hợp ${setLine("nha", season)} vì có cửa + khách cùng một theme. Nếu chỉ muốn một góc: ${setLine("khach", season)}. Gửi ảnh cửa và phòng khách.`
+          : `Mình chỉ đúng 1 set theo tường, không bán rải. Chung cư thường ${setLine("khach", season)}. Nhà phố thường ${setLine("nha", season)}. Gửi 1 ảnh phòng khách.`,
     };
   }
 
@@ -174,7 +178,7 @@ export function draftReply(text: string, suggestedFromThread?: ProductId): Draft
     return {
       intent,
       suggestedSet: "khach",
-      reply: "Mai trong set là dáng gọn, không tán hội chợ. Ban ngày nhìn gỗ/kem, tối mới lộ đèn. Mình gửi cận ban ngày — nếu trông rẻ, đừng mua. Set Phòng khách 699k.",
+      reply: `Đồ trong set là dáng gọn, không hàng hội chợ. ${setLine("khach", season)}. Mình gửi cận ban ngày — nếu trông rẻ, đừng mua.`,
     };
   }
 
@@ -182,35 +186,36 @@ export function draftReply(text: string, suggestedFromThread?: ProductId): Draft
     return {
       intent,
       suggestedSet: set ?? "khach",
-      reply: "Nhà thuê: trong hộp có móc dán. Cây mai đặt sàn, không khoan. Tường sơn bong thì nói mình — mình chỉ vị trí kệ/cửa, không dán. Gửi ảnh tường (có đèn không).",
+      reply: "Nhà thuê: trong hộp có móc dán. Đồ đặt sàn, không khoan. Tường sơn bong thì nói mình — mình chỉ vị trí, không dán. Gửi ảnh tường.",
     };
   }
 
   if (intent === "giao") {
     const far = province?.far;
     const name = province?.name ?? "tỉnh bạn";
-    if (new Date() > DEADLINE_28) {
+    const now = new Date();
+    if (now > season.hardStop) {
       return {
         intent,
         escalate: true,
-        escalateReason: "Đã qua 28 Tết — không nhận đơn giao Tết.",
-        reply: "Mốc giao Tết năm nay đã khép. Mình không nhận đơn hứa trước Tết nữa — tránh nhà bạn Tết không có hàng.",
+        escalateReason: `Đã qua hạn giao ${season.name}.`,
+        reply: `Mốc giao ${season.name} đã khép. Mình không nhận đơn hứa kịp nữa.`,
       };
     }
-    if (far && new Date() > DEADLINE_FAR) {
+    if (far && now > season.farCutoff) {
       return {
         intent,
         escalate: true,
-        escalateReason: `${name} là tỉnh xa, đã qua mốc 25/01.`,
-        reply: `${name} mình không dám hứa kịp Tết nếu chốt hôm nay. Muốn giữ hàng giao sau Tết thì nói — không nhận rồi im.`,
+        escalateReason: `${name} là tỉnh xa, đã qua mốc giao sớm.`,
+        reply: `${name} mình không dám hứa kịp ${season.name} nếu chốt hôm nay. Muốn giữ hàng giao sau thì nói — không nhận rồi im.`,
       };
     }
     return {
       intent,
       suggestedSet: set,
       reply: province
-        ? `${name}: chốt trước ${far ? "25/01" : "30/01 (23 tháng Chạp)"} thì kịp Tết, COD. Sau mốc đó mình nói thẳng, không nhận. Gửi SĐT + địa chỉ có tỉnh để chốt.`
-        : "Nội thành / tỉnh gần: chốt trước 30/01 (23 Chạp) thì kịp. Tỉnh xa: trước 25/01. Bạn ở tỉnh nào?",
+        ? `${name}: ${season.shipRules} COD. Gửi SĐT + địa chỉ có tỉnh để chốt.`
+        : `${season.shipRules} Bạn ở tỉnh nào?`,
     };
   }
 
@@ -218,7 +223,7 @@ export function draftReply(text: string, suggestedFromThread?: ProductId): Draft
     return {
       intent,
       suggestedSet: set ?? "khach",
-      reply: "Giá set niêm yết, không mặc cả. Có thể tặng thêm móc/dây nếu đơn hôm nay. Set 699k là mức mình giữ. Chốt SĐT + địa chỉ thì mình giữ hàng.",
+      reply: `Giá set niêm yết, không mặc cả. Có thể tặng thêm móc nếu đơn hôm nay. Mức mình giữ: ${setLine(set ?? "khach", season)}. Chốt SĐT + địa chỉ thì mình giữ hàng.`,
     };
   }
 
@@ -244,8 +249,8 @@ export function draftReply(text: string, suggestedFromThread?: ProductId): Draft
       intent,
       suggestedSet: set,
       reply: set
-        ? `Chốt ${setLine(set)}, COD. Gửi: họ tên, SĐT, địa chỉ có tỉnh. Mình xác nhận mã đơn ngay — không chuyển khoản trước.`
-        : "Mình chốt đúng 1 set: 399 / 699 / 999. Bạn lấy set nào? Gửi SĐT + địa chỉ có tỉnh.",
+        ? `Chốt ${setLine(set, season)}, COD. Gửi: họ tên, SĐT, địa chỉ có tỉnh. Mình xác nhận mã đơn ngay — không chuyển khoản trước.`
+        : `Mình chốt đúng 1 set: ${prices}. Bạn lấy set nào? Gửi SĐT + địa chỉ có tỉnh.`,
     };
   }
 
@@ -254,7 +259,7 @@ export function draftReply(text: string, suggestedFromThread?: ProductId): Draft
     suggestedSet: set ?? "khach",
     escalate: /mắng|lừa|scam|kiện|luật sư|hàng giả/.test(t),
     escalateReason: /mắng|lừa|scam|kiện|hàng giả/.test(t) ? "Khiếu nại / nghi ngờ — người trả." : undefined,
-    reply: "Mình bán 3 set Tết hiện đại: cửa 399k, phòng khách 699k, cả nhà 999k. Gửi ảnh phòng hoặc nói chung cư/nhà phố — mình chỉ 1 set, không nhồi.",
+    reply: `Mình bán 3 set ${season.name}: ${prices}. Gửi ảnh phòng hoặc nói chung cư/nhà phố — mình chỉ 1 set, không nhồi.`,
   };
 }
 
@@ -265,21 +270,24 @@ export type CloseInput = {
   provinceName?: string;
   stock: StockMap;
   now?: Date;
+  season?: SeasonView;
 };
 
 export function evaluateClose(input: CloseInput): CloseVerdict {
   const now = input.now ?? new Date();
+  const season = input.season ?? resolveSeason(now);
   const province =
     (input.provinceName ? PROVINCES.find((p) => p.name === input.provinceName) : undefined) ??
     (input.address ? detectProvince(input.address) : undefined);
   const phone = input.phone && input.phone.replace(/\D/g, "").length === 10 ? input.phone : undefined;
+  const chosen = input.setId ? (season.products.find((p) => p.id === input.setId) ?? getProduct(input.setId)) : undefined;
 
   const gates: CloseGate[] = [
     {
       id: "set",
       label: "Đúng 1 set",
       ok: Boolean(input.setId),
-      detail: input.setId ? getProduct(input.setId).name : "Chưa chọn 399 / 699 / 999",
+      detail: chosen ? chosen.name : `Chưa chọn set ${season.name}`,
     },
     {
       id: "phone",
@@ -298,23 +306,23 @@ export function evaluateClose(input: CloseInput): CloseVerdict {
       label: "Còn hàng",
       ok: input.setId ? (input.stock[input.setId] ?? 0) > 0 : false,
       detail: input.setId
-        ? `Tồn ${getProduct(input.setId).name}: ${input.stock[input.setId]}`
+        ? `Tồn ${chosen?.name ?? input.setId}: ${input.stock[input.setId]}`
         : "Chưa gắn set",
     },
     {
       id: "deadline",
       label: "Còn trong mốc giao",
       ok: (() => {
-        if (now > DEADLINE_28) return false;
-        if (province?.far && now > DEADLINE_FAR) return false;
-        if (now > DEADLINE_23) return false;
+        if (now > season.hardStop) return false;
+        if (province?.far && now > season.farCutoff) return false;
+        if (now > season.sellUntil) return false;
         return true;
       })(),
       detail: (() => {
-        if (now > DEADLINE_28) return "Đã qua 28 Tết";
-        if (province?.far && now > DEADLINE_FAR) return `${province.name}: tỉnh xa, mốc 25/01`;
-        if (now > DEADLINE_23) return "Đã qua 23 Chạp — chỉ người được nhận";
-        return province?.far ? `${province.name}: kịp nếu chốt trước 25/01` : "Kịp mốc 23 Chạp (30/01)";
+        if (now > season.hardStop) return season.id === "tet" ? "Đã qua 28 Tết" : `Đã qua ngày ${season.name}`;
+        if (province?.far && now > season.farCutoff) return `${province.name}: tỉnh xa, đã qua mốc giao sớm`;
+        if (now > season.sellUntil) return season.id === "tet" ? "Đã qua 23 tháng Chạp" : `Đã qua hạn giao ${season.name}`;
+        return province?.far ? `${province.name}: kịp nếu chốt sớm` : `Còn trong hạn ${season.name}`;
       })(),
     },
   ];
@@ -330,40 +338,23 @@ export function evaluateClose(input: CloseInput): CloseVerdict {
   return { canClose: failReasons.length === 0, gates, failReasons };
 }
 
-export const SALE_CARDS: { title: string; body: string }[] = [
-  {
-    title: "Giá",
-    body: "3 set: Cửa 399k · Phòng khách 699k · Cả nhà 999k. Không mix lẻ. Hỏi loại nhà rồi chỉ 1 set.",
-  },
-  {
-    title: "Chung cư",
-    body: "Tường 2–3m → Set Phòng khách 699k. Cửa hẹp → Set Cửa 399k. Xin ảnh phòng.",
-  },
-  {
-    title: "Nhà phố",
-    body: "Cửa + khách → Set Cả nhà 999k. Chỉ muốn góc ảnh → 699k.",
-  },
-  {
-    title: "Mai giả?",
-    body: "Dáng gọn, cận ban ngày. Không hội chợ. Không đẹp thì đừng mua.",
-  },
-  {
-    title: "Nhà thuê",
-    body: "Móc dán có trong hộp. Cây đặt sàn. Không khoan.",
-  },
-  {
-    title: "Giao Tết",
-    body: "Tỉnh gần: chốt trước 30/01. Tỉnh xa: 25/01. Sau mốc: nói không, không nhận rồi im.",
-  },
-  {
-    title: "Xin giảm",
-    body: "Không mặc cả set. Có thể tặng phụ kiện nhỏ. Giữ giá, đẩy chốt.",
-  },
-  {
-    title: "Gửi ảnh",
-    body: "Đo ước lượng → đúng 1 set → mời COD hoặc SĐT.",
-  },
-];
+export function saleCards() {
+  const s = resolveSeason();
+  const line = (id: ProductId) => {
+    const p = s.products.find((x) => x.id === id) ?? getProduct(id);
+    return `${p.name} ${formatVnd(p.price)}`;
+  };
+  return [
+    { title: "Giá", body: `3 set ${s.name}: ${line("cua")} · ${line("khach")} · ${line("nha")}. Không mix lẻ. Hỏi loại nhà rồi chỉ 1 set.` },
+    { title: "Chung cư", body: `Tường 2–3m → ${line("khach")}. Cửa hẹp → ${line("cua")}. Xin ảnh phòng.` },
+    { title: "Nhà phố", body: `Cửa + khách → ${line("nha")}. Chỉ muốn một góc → ${line("khach")}.` },
+    { title: "Nhìn rẻ?", body: "Dáng gọn, cận ban ngày. Không hội chợ. Không đẹp thì đừng mua." },
+    { title: "Nhà thuê", body: "Móc dán có trong hộp. Đồ đặt sàn. Không khoan." },
+    { title: `Giao ${s.name}`, body: s.shipRules },
+    { title: "Xin giảm", body: "Không mặc cả set. Có thể tặng phụ kiện nhỏ. Giữ giá, đẩy chốt." },
+    { title: "Gửi ảnh", body: "Đo ước lượng → đúng 1 set → mời COD hoặc SĐT." },
+  ];
+}
 
 export const CHANNEL_LABEL: Record<Channel, string> = {
   zalo: "Zalo",

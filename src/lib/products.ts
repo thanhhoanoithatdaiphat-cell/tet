@@ -1,4 +1,7 @@
-export type ProductId = "cua" | "khach" | "nha";
+import { resolveSku } from "./catalog";
+import { seasonProducts } from "./seasons";
+
+export type ProductId = string;
 
 export type Product = {
   id: ProductId;
@@ -76,14 +79,32 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
-export function getProduct(id: ProductId) {
-  return PRODUCTS.find((p) => p.id === id)!;
+export function listProducts() {
+  return seasonProducts();
 }
 
-export const ZALO_PRESET = (id?: ProductId) => {
+export function getProduct(id: string): Product {
+  const sku = resolveSku(id);
+  if (sku) {
+    return {
+      id: sku.cartId,
+      name: sku.name,
+      price: sku.price,
+      tagline: sku.unit,
+      blurb: sku.blurb,
+      wall: sku.unit,
+      includes: [],
+      image: sku.image,
+      saveVsRetail: 0,
+    };
+  }
+  return listProducts().find((p) => p.id === id) ?? PRODUCTS.find((p) => p.id === id) ?? PRODUCTS[0];
+}
+
+export const ZALO_PRESET = (id?: string) => {
   const p = id ? getProduct(id) : undefined;
   const line = p
-    ? `Mình muốn đặt ${p.name} (${p.price.toLocaleString("vi-VN")}đ). Gửi ảnh phòng này ạ.`
-    : "Mình gửi ảnh phòng, nhờ chỉ set Tết phù hợp.";
+    ? `Mình muốn đặt ${p.name} (${p.price.toLocaleString("vi-VN")}đ).`
+    : "Mình muốn xem đồ gỗ Petitewoodart. Nhờ báo món này ạ.";
   return line;
 };

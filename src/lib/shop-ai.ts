@@ -7,8 +7,10 @@ import {
   evaluateClose,
   type CloseVerdict,
 } from "./brain";
-import { getProduct, type ProductId } from "./products";
+import { type ProductId } from "./products";
 import { formatVnd } from "./utils";
+import { catalogPriceTokens, catalogReply, CATALOG } from "./catalog";
+import { resolveSeason } from "./seasons";
 
 export type ChatTurn = { role: "user" | "assistant"; content: string };
 
@@ -24,13 +26,12 @@ export type ConsultResult = {
   verdict: CloseVerdict;
 };
 
-const SETS: ProductId[] = ["cua", "khach", "nha"];
-
 function catalogBlock() {
-  return SETS.map((id) => {
-    const p = getProduct(id);
-    return `${id}: ${p.name} ${formatVnd(p.price)} — ${p.tagline}. ${p.blurb} Gồm: ${p.includes.join("; ")}.`;
-  }).join("\n");
+  return CATALOG.map((p) =>
+    p.sizes
+      ? `${p.name}: ${p.sizes.map((s) => `${s.label} ${formatVnd(s.price)}`).join(" hoặc ")}`
+      : `${p.name}: ${formatVnd(p.price)}/${p.unit}`,
+  ).join("\n");
 }
 
 function extractJson(raw: string): Record<string, unknown> | null {
@@ -50,7 +51,7 @@ function extractJson(raw: string): Record<string, unknown> | null {
 
 function priceSafe(text: string) {
   const hits = text.match(/\d{1,3}(?:[.\s]\d{3})+/g) ?? [];
-  const allowed = new Set(["399.000", "699.000", "999.000", "399000", "699000", "999000"]);
+  const allowed = catalogPriceTokens();
   return hits.every((h) => allowed.has(h.replace(/\s/g, "")));
 }
 
@@ -78,16 +79,18 @@ async function callGrok(messages: { role: string; content: string }[], apiKey: s
 }
 
 export const consultShop = createServerFn({ method: "POST" })
-  .validator((input: { messages: ChatTurn[]; stock: Record<ProductId, number> }) => ({
+  .validator((input: { messages: ChatTurn[]; stock: Record<ProductId, number>; seasonId?: string | null }) => ({
     messages: input.messages.slice(-10),
     stock: input.stock,
+    seasonId: typeof input.seasonId === "string" ? input.seasonId : null,
   }))
   .handler(async ({ data }): Promise<ConsultResult> => {
+    const season = resolveSeason(new Date(), data.seasonId);
     const lastUser = [...data.messages].reverse().find((m) => m.role === "user")?.content ?? "";
-    const rules = draftReply(lastUser);
+    const rules = draftReply(lastUser, undefined, season);
     const phone = detectPhone(data.messages.map((m) => m.content).join("\n"));
     const province = detectProvince(lastUser) ?? detectProvince(data.messages.map((m) => m.content).join("\n"));
-    const setFromText = detectSet(lastUser) ?? rules.suggestedSet;
+    const setFromText = detectSet(lastUser, season.products) ?? rules.suggestedSet;
     const addressHint = province ? (lastUser.length > 16 ? lastUser : province.name) : undefined;
 
     const fallback = (): ConsultResult => {
@@ -97,11 +100,12 @@ export const consultShop = createServerFn({ method: "POST" })
         phone,
         address: addressHint,
         stock: data.stock,
+        season,
       });
       return {
         ok: true,
         source: "rules",
-        reply: rules.reply,
+        reply: catalogReply(lastUser),
         suggestedSet,
         phone,
         address: addressHint,
@@ -115,25 +119,17 @@ export const consultShop = createServerFn({ method: "POST" })
       return fallback();
     }
 
-    const system = `Bạn là nhân viên shop Nhà Có Tết. Trả JSON thuần, không markdown.
-Giọng: tiếng Việt, cụ thể, có số, không sến, không emoji. Tối đa 60 từ, 2–4 câu. Không nói số tồn kho. Luôn kết bằng 1 câu hỏi chốt (ảnh tường / loại nhà / SĐT).
+    const system = `Bạn là nhân viên Petitewoodart, xưởng đồ gỗ cắt laser. Trả JSON thuần, không markdown.
+Giọng: tiếng Việt, cụ thể, có số, không sến, không emoji. Tối đa 70 từ. Không bịa món. Không nói giá ngoài danh sách.
 
-CHỈ 3 SET — cấm bịa SKU, cấm giá khác:
+DANH SÁCH GIÁ BÁN LẺ:
 ${catalogBlock()}
 
-COD, không chuyển khoản trước.
-Mốc giao Tết Đinh Mùi 06/02/2027:
-- Tỉnh gần: chốt trước 30/01/2027 (23 Chạp).
-- Tỉnh xa (miền núi, Tây Nguyên, ĐBSCL xa): trước 25/01/2027.
-- Sau 04/02/2027: không nhận đơn hứa Tết.
-Không khoan: móc dán + cây đặt sàn.
-Đổi 48h hàng còn nguyên.
-Mai dáng gọn, không hội chợ.
-Tồn hiện tại: cửa ${data.stock.cua}, khách ${data.stock.khach}, nhà ${data.stock.nha}. Hết thì không bán set đó.
-Khiếu nại / nghi lừa → escalate true, không cãi.
+COD, không chuyển khoản trước. Giao toàn quốc. Từ 20 cái có giá sỉ, bảo khách nhắn Zalo, không tự tính phần trăm.
+Muốn mua: bảo bấm đúng món trên trang rồi Thêm vào giỏ.
 
 JSON:
-{"reply":"string","suggestedSet":"cua"|"khach"|"nha"|null,"phone":"10 số hoặc null","address":"string hoặc null","name":"string hoặc null","escalate":false}`;
+{"reply":"string","suggestedSet":null,"phone":"10 số hoặc null","address":"string hoặc null","name":"string hoặc null","escalate":false}`;
 
     const grokMessages = [
       { role: "system", content: system },
@@ -162,11 +158,12 @@ JSON:
         phone: mergedPhone,
         address: mergedAddress,
         stock: data.stock,
+        season,
       });
       return {
         ok: true,
         source: useAi ? "ai" : "rules",
-        reply: useAi ? aiReply : rules.reply,
+        reply: useAi ? aiReply : catalogReply(lastUser),
         suggestedSet,
         phone: mergedPhone,
         address: mergedAddress,

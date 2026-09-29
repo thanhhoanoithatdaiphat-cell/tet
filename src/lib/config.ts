@@ -1,10 +1,10 @@
 export const SHOP = {
-  name: "Nhà Có Tết",
-  tagline: "Tết hiện đại, treo một buổi là xong",
-  zaloUrl: "https://zalo.me/0901234567",
-  phoneDisplay: "0901 234 567",
-  phoneTel: "0901234567",
-  email: "chao@nhacotet.vn",
+  name: "Petitewoodart",
+  tagline: "Đồ gỗ cắt laser · giá bán lẻ",
+  zaloUrl: "https://zalo.me/0901741879",
+  phoneDisplay: "0901 741 879",
+  phoneTel: "0901741879",
+  email: "",
 } as const;
 
 /** 23 tháng Chạp Bính Ngọ — 30/01/2027 */
